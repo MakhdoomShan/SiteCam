@@ -7,35 +7,44 @@
         android:id="@+id/preview"
         android:layout_width="match_parent" android:layout_height="match_parent" />
 
+    <com.sitecam.CrosshairView
+        android:id="@+id/cross"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/info"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_gravity="top" android:layout_marginEnd="230dp"
-        android:background="#88000000" android:padding="10dp"
-        android:textColor="#FFFFFF" android:textSize="14sp" />
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:background="#55000000" android:padding="5dp"
+        android:textColor="#FFFFFF" android:textSize="11sp" />
 
     <ScrollView
-        android:layout_width="230dp" android:layout_height="match_parent"
-        android:layout_gravity="end" android:background="#88000000">
+        android:layout_width="104dp" android:layout_height="match_parent"
+        android:layout_gravity="end" android:background="#55000000">
         <LinearLayout
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="vertical" android:padding="8dp">
+            android:orientation="vertical" android:padding="3dp">
             <EditText
                 android:id="@+id/siteId"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_width="match_parent" android:layout_height="38dp"
                 android:hint="SITE ID" android:inputType="textCapCharacters"
                 android:singleLine="true" android:textColor="#FFFFFF"
-                android:textColorHint="#AAAAAA" />
-            <Button android:id="@+id/btnMode"
-                android:layout_width="match_parent" android:layout_height="wrap_content" />
-            <Button android:id="@+id/btnOrient"
-                android:layout_width="match_parent" android:layout_height="wrap_content" />
-            <Button android:id="@+id/btnFlip"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="FRONT / BACK" />
-            <Button android:id="@+id/btnCapture"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="CAPTURE" />
+                android:textColorHint="#AAAAAA" android:textSize="12sp" />
+            <Button android:id="@+id/btnCapture" style="@style/SmallBtn"
+                android:layout_width="match_parent" android:layout_height="42dp"
+                android:textSize="13sp" android:text="CAPTURE" />
+            <Button android:id="@+id/btnPrint" style="@style/SmallBtn"
+                android:layout_width="match_parent" android:layout_height="32dp" />
+            <Button android:id="@+id/btnMode" style="@style/SmallBtn"
+                android:layout_width="match_parent" android:layout_height="32dp" />
+            <Button android:id="@+id/btnAuto" style="@style/SmallBtn"
+                android:layout_width="match_parent" android:layout_height="32dp" />
+            <Button android:id="@+id/btnFlip" style="@style/SmallBtn"
+                android:layout_width="match_parent" android:layout_height="32dp" android:text="FLIP CAM" />
+            <Button android:id="@+id/btnOrient" style="@style/SmallBtn"
+                android:layout_width="match_parent" android:layout_height="32dp" android:text="ROTATE" />
+            <Button android:id="@+id/btnSettings" style="@style/SmallBtn"
+                android:layout_width="match_parent" android:layout_height="32dp" android:text="MENU" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

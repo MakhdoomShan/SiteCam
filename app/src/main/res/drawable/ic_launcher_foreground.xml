@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- signal arcs -->
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFF" android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M46,26 A11.3,11.3 0 0 0 46,42 M62,26 A11.3,11.3 0 0 1 62,42 M41.3,21.3 A18,18 0 0 0 41.3,46.7 M66.7,21.3 A18,18 0 0 1 66.7,46.7" />
+    <!-- tower -->
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFF" android:strokeWidth="3.5"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M54,38 L42,84 M54,38 L66,84 M47.2,64 L60.8,64 M44.1,76 L63.9,76 M47.2,64 L63.9,76 M60.8,64 L44.1,76" />
+    <!-- antenna top -->
+    <path android:fillColor="#FFC107"
+        android:pathData="M54,31 m-3.5,0 a3.5,3.5 0 1,0 7,0 a3.5,3.5 0 1,0 -7,0" />
+</vector>

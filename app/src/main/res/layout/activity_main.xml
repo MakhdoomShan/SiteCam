@@ -7,44 +7,58 @@
         android:id="@+id/preview"
         android:layout_width="match_parent" android:layout_height="match_parent" />
 
+    <com.sitecam.CrosshairView
+        android:id="@+id/cross"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/info"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:background="#88000000" android:padding="12dp"
-        android:textColor="#FFFFFF" android:textSize="15sp" />
+        android:background="#55000000" android:padding="6dp"
+        android:textColor="#FFFFFF" android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btnCapture" style="@style/SmallBtn"
+        android:layout_width="130dp" android:layout_height="46dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="88dp"
+        android:textSize="15sp" android:text="CAPTURE" />
 
     <LinearLayout
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_gravity="bottom" android:orientation="vertical"
-        android:background="#88000000" android:padding="12dp">
-
-        <EditText
-            android:id="@+id/siteId"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:hint="SITE ID" android:inputType="textCapCharacters"
-            android:singleLine="true" android:textColor="#FFFFFF"
-            android:textColorHint="#AAAAAA" />
-
-        <Button
-            android:id="@+id/btnMode"
-            android:layout_width="match_parent" android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/btnOrient"
-            android:layout_width="match_parent" android:layout_height="wrap_content" />
+        android:background="#66000000" android:padding="4dp">
 
         <LinearLayout
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <Button
-                android:id="@+id/btnFlip"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="FRONT / BACK" />
-            <Button
-                android:id="@+id/btnCapture"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="CAPTURE" />
+            <EditText
+                android:id="@+id/siteId"
+                android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="2"
+                android:hint="SITE ID" android:inputType="textCapCharacters"
+                android:singleLine="true" android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA" android:textSize="14sp" />
+            <Button android:id="@+id/btnAuto" style="@style/SmallBtn"
+                android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" />
+            <Button android:id="@+id/btnSettings" style="@style/SmallBtn"
+                android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                android:text="MENU" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button android:id="@+id/btnPrint" style="@style/SmallBtn"
+                android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" />
+            <Button android:id="@+id/btnMode" style="@style/SmallBtn"
+                android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" />
+            <Button android:id="@+id/btnFlip" style="@style/SmallBtn"
+                android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                android:text="FLIP CAM" />
+            <Button android:id="@+id/btnOrient" style="@style/SmallBtn"
+                android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                android:text="ROTATE" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
