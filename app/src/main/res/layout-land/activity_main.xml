@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#000000">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="top" android:layout_marginEnd="230dp"
+        android:background="#88000000" android:padding="10dp"
+        android:textColor="#FFFFFF" android:textSize="14sp" />
+
+    <ScrollView
+        android:layout_width="230dp" android:layout_height="match_parent"
+        android:layout_gravity="end" android:background="#88000000">
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="8dp">
+            <EditText
+                android:id="@+id/siteId"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:hint="SITE ID" android:inputType="textCapCharacters"
+                android:singleLine="true" android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA" />
+            <Button android:id="@+id/btnMode"
+                android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <Button android:id="@+id/btnOrient"
+                android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <Button android:id="@+id/btnFlip"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="FRONT / BACK" />
+            <Button android:id="@+id/btnCapture"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="CAPTURE" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

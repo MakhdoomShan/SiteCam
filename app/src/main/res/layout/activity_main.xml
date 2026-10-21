@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#000000">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#88000000" android:padding="12dp"
+        android:textColor="#FFFFFF" android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="bottom" android:orientation="vertical"
+        android:background="#88000000" android:padding="12dp">
+
+        <EditText
+            android:id="@+id/siteId"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="SITE ID" android:inputType="textCapCharacters"
+            android:singleLine="true" android:textColor="#FFFFFF"
+            android:textColorHint="#AAAAAA" />
+
+        <Button
+            android:id="@+id/btnMode"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnOrient"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnFlip"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="FRONT / BACK" />
+            <Button
+                android:id="@+id/btnCapture"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="CAPTURE" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
