@@ -23,6 +23,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.RelativeSizeSpan
+import android.view.ScaleGestureDetector
 import android.view.Surface
 import android.widget.Button
 import android.widget.EditText
@@ -31,6 +32,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -61,6 +63,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
     private lateinit var btnMode: Button
     private lateinit var btnOrient: Button
     private lateinit var btnAuto: Button
+    private lateinit var zoomText: TextView
+    private var camera: Camera? = null
 
     private var imageCapture: ImageCapture? = null
     private var front = false
@@ -129,6 +133,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
         btnMode = findViewById(R.id.btnMode)
         btnOrient = findViewById(R.id.btnOrient)
         btnAuto = findViewById(R.id.btnAuto)
+        zoomText = findViewById(R.id.zoomText)
         sm = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -166,6 +171,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
         siteId.setOnFocusChangeListener { _, has ->
             if (has && siteId.text.toString() == NOT_IN_LIST) setIdText("")
         }
+
+        // Zoom: on-screen + / - and two-finger pinch on the camera view
+        findViewById<Button>(R.id.btnZoomIn).setOnClickListener { stepZoom(1.25f) }
+        findViewById<Button>(R.id.btnZoomOut).setOnClickListener { stepZoom(0.8f) }
+        val pinch = ScaleGestureDetector(this, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(d: ScaleGestureDetector): Boolean { stepZoom(d.scaleFactor); return true }
+        })
+        preview.setOnTouchListener { _, ev -> pinch.onTouchEvent(ev); true }
 
         permLauncher.launch(arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION))
     }
@@ -429,12 +442,23 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
             val sel = if (front) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 provider.unbindAll()
-                provider.bindToLifecycle(this, sel, pv, imageCapture)
+                val cam = provider.bindToLifecycle(this, sel, pv, imageCapture)
+                camera = cam
+                cam.cameraInfo.zoomState.observe(this) { z ->
+                    zoomText.text = "%.1fx".format(Locale.US, z.zoomRatio)
+                }
                 smoothInit = false
             } catch (e: Exception) {
                 Toast.makeText(this, "Camera error: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun stepZoom(factor: Float) {
+        val c = camera ?: return
+        val z = c.cameraInfo.zoomState.value ?: return
+        val r = (z.zoomRatio * factor).coerceIn(z.minZoomRatio, z.maxZoomRatio)
+        c.cameraControl.setZoomRatio(r)
     }
 
     private fun capture() {

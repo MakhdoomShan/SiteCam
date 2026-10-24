@@ -11,6 +11,23 @@
         android:id="@+id/cross"
         android:layout_width="match_parent" android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:layout_width="44dp" android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="4dp" android:orientation="vertical"
+        android:background="#55000000" android:gravity="center_horizontal">
+        <Button android:id="@+id/btnZoomIn" style="@style/SmallBtn"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:textSize="20sp" android:text="+" />
+        <TextView android:id="@+id/zoomText"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:padding="2dp" android:text="1.0x"
+            android:textColor="#FFFFFF" android:textSize="12sp" />
+        <Button android:id="@+id/btnZoomOut" style="@style/SmallBtn"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:textSize="20sp" android:text="-" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/info"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
