@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#000000">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
+    <com.sitecam.CrosshairView
+        android:id="@+id/cross"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
+    <com.sitecam.CompassTapeView
+        android:id="@+id/tape"
+        android:layout_width="match_parent" android:layout_height="84dp"
+        android:layout_gravity="top" />
+
+    <LinearLayout
+        android:layout_width="44dp" android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="4dp" android:orientation="vertical"
+        android:background="#55000000" android:gravity="center_horizontal">
+        <Button android:id="@+id/btnZoomIn" style="@style/SmallBtn"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:textSize="20sp" android:text="+" />
+        <TextView android:id="@+id/zoomText"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:padding="2dp" android:text="1.0x"
+            android:textColor="#FFFFFF" android:textSize="12sp" />
+        <Button android:id="@+id/btnZoomOut" style="@style/SmallBtn"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:textSize="20sp" android:text="-" />
+    </LinearLayout>
+
+<LinearLayout
+        android:id="@+id/infoBox"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="bottom" android:layout_marginBottom="86dp"
+        android:orientation="horizontal" android:padding="5dp"
+        android:background="#55000000">
+        <TextView android:id="@+id/infoL"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:textColor="#FFFFFF" android:textSize="10sp" />
+        <TextView android:id="@+id/infoR"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:textColor="#FFFFFF" android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="bottom" android:orientation="horizontal"
+        android:background="#66000000" android:padding="4dp">
+
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="3"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/siteId"
+                    android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="2"
+                    android:hint="SITE ID" android:inputType="textCapCharacters"
+                    android:singleLine="true" android:textColor="#FFFFFF"
+                    android:textColorHint="#AAAAAA" android:textSize="14sp" />
+                <Button android:id="@+id/btnAuto" style="@style/SmallBtn"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" />
+                <Button android:id="@+id/btnSettings" style="@style/SmallBtn"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                    android:text="MENU" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button android:id="@+id/btnPrint" style="@style/SmallBtn"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" />
+                <Button android:id="@+id/btnMode" style="@style/SmallBtn"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" />
+                <Button android:id="@+id/btnFlip" style="@style/SmallBtn"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                    android:text="FLIP CAM" />
+                <Button android:id="@+id/btnOrient" style="@style/SmallBtn"
+                    android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+                    android:text="ROTATE" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnCapture" style="@style/SmallBtn"
+            android:layout_width="0dp" android:layout_height="76dp" android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:textSize="14sp" android:text="CAPTURE" />
+    </LinearLayout>
+</FrameLayout>
