@@ -16,6 +16,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
@@ -23,6 +24,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.RelativeSizeSpan
+import android.util.Size
 import android.view.ScaleGestureDetector
 import android.view.Surface
 import android.widget.Button
@@ -37,6 +39,9 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -57,6 +62,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
 
     private lateinit var preview: PreviewView
     private lateinit var cross: CrosshairView
+    private lateinit var tape: CompassTapeView
     private lateinit var info: TextView
     private lateinit var siteId: EditText
     private lateinit var btnPrint: Button
@@ -127,6 +133,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
 
         preview = findViewById(R.id.preview)
         cross = findViewById(R.id.cross)
+        tape = findViewById(R.id.tape)
         info = findViewById(R.id.info)
         siteId = findViewById(R.id.siteId)
         btnPrint = findViewById(R.id.btnPrint)
@@ -391,6 +398,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
         return "Lat: %.6f  Lon: %.6f%s".format(Locale.US, l.latitude, l.longitude, acc)
     }
 
+    private fun altLine(): String {
+        val l = location ?: return ""
+        if (!l.hasAltitude()) return ""
+        val alt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && l.hasMslAltitude())
+            l.mslAltitudeMeters.toDouble() else l.altitude
+        return "Altitude: %.0f m".format(Locale.US, alt)
+    }
+
     private fun tiltLine(): String =
         "Tilt: %.0f° %s  Roll: %.0f°".format(Locale.US, abs(tiltUp), if (tiltUp >= 0) "up" else "down", abs(rollDeg))
 
@@ -405,8 +420,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
     }
 
     private fun updateInfo() {
+        tape.azimuth = shownAzimuth()
         val sb = SpannableStringBuilder()
-        sb.append(latLonLine()).append("\n").append(azMain())
+        sb.append(latLonLine())
+        if (altLine().isNotEmpty()) sb.append("\n").append(altLine())
+        sb.append("\n").append(azMain())
         val s = sb.length
         sb.append(azSub())
         sb.setSpan(RelativeSizeSpan(0.75f), s, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -422,6 +440,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
         val out = ArrayList<Line>()
         out.add(Line("Site ID: " + (if (raw.isEmpty()) "-" else raw) + dist))
         out.add(Line(latLonLine()))
+        if (altLine().isNotEmpty()) out.add(Line(altLine()))
         if (printAz) {
             out.add(Line(azMain(), azSub()))
             out.add(Line(tiltLine()))
@@ -438,7 +457,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
             val rotation = displayRotation()
             val pv = Preview.Builder().setTargetRotation(rotation).build()
                 .also { it.setSurfaceProvider(preview.surfaceProvider) }
-            imageCapture = ImageCapture.Builder().setTargetRotation(rotation).build()
+            val rs = ResolutionSelector.Builder()
+                .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
+                .setResolutionStrategy(ResolutionStrategy(Size(2560, 1920),
+                    ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER_THEN_HIGHER))
+                .build()
+            imageCapture = ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+                .setResolutionSelector(rs)
+                .setTargetRotation(rotation).build()
             val sel = if (front) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 provider.unbindAll()
@@ -465,13 +492,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
         val ic = imageCapture ?: return
         ic.targetRotation = displayRotation()
         val lines = stampLines()
+        val tapeAz: Float? = if (printAz) shownAzimuth() else null
         val raw = siteId.text.toString().trim()
         val id = if (raw == NOT_IN_LIST) "NOSITE" else raw.replace(Regex("[^A-Za-z0-9_-]"), "")
         val tmp = File(cacheDir, "tmp_${System.currentTimeMillis()}.jpg")
         ic.takePicture(ImageCapture.OutputFileOptions.Builder(tmp).build(), bg,
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(r: ImageCapture.OutputFileResults) {
-                    val ok = try { stampAndSave(tmp, lines, id) } catch (e: Exception) { false }
+                    val ok = try { stampAndSave(tmp, lines, id, tapeAz) } catch (e: Exception) { false }
                     tmp.delete()
                     runOnUiThread {
                         Toast.makeText(this@MainActivity,
@@ -484,7 +512,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
             })
     }
 
-    private fun stampAndSave(file: File, lines: List<Line>, id: String): Boolean {
+    private fun stampAndSave(file: File, lines: List<Line>, id: String, tapeAz: Float?): Boolean {
         val deg = when (ExifInterface(file.absolutePath).getAttributeInt(
             ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
             ExifInterface.ORIENTATION_ROTATE_90 -> 90f
@@ -510,6 +538,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
             val y = top + lh * (i + 1) - size * 0.1f
             canvas.drawText(l.main, x, y, paint)
             if (l.sub.isNotEmpty()) canvas.drawText(l.sub, x + paint.measureText(l.main), y, subPaint)
+        }
+
+        if (tapeAz != null) {
+            TapeRenderer.draw(canvas, bmp.width.toFloat(), tapeAz, minOf(bmp.width, bmp.height) / 360f, 64f)
         }
 
         val name = (if (id.isEmpty()) "IMG" else id) + "_" +
