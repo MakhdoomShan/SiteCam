@@ -56,7 +56,10 @@ import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener {
 
-    companion object { const val NOT_IN_LIST = "Site is Not in list" }
+    companion object {
+        const val NOT_IN_LIST = "Site is Not in list"
+        const val BUILD = "v3"
+    }
 
     private data class Line(val main: String, val sub: String = "")
 
@@ -232,7 +235,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
             "Site distance limit: $limitM m"
         )
         AlertDialog.Builder(this)
-            .setTitle("Settings")
+            .setTitle("Settings  (SiteCam $BUILD)")
             .setItems(items) { _, i ->
                 val e = prefs().edit()
                 when (i) {
@@ -437,6 +440,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener, LocationListener 
         val r = StringBuilder(compassLine())
         if (nearestText.isNotEmpty()) r.append("\n").append(nearestText)
         r.append("\n").append(listStatus())
+        r.append("\n").append("SiteCam $BUILD")
         infoR.text = r.toString()
     }
 
